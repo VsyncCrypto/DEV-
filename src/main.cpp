@@ -1554,33 +1554,7 @@ int64_t GetBlockValue(int nHeight)
 
 int64_t GetMasternodePayment()
 {
-    
-    int64_t ret = blockValue;
-    
-    if (nHeight <= 259200 ) {
-        ret = blockValue * 0;
-    } else if (nHeight > 259200 && nHeight <= 1050000) {
-        ret = blockValue * 0.70;
-    } else if (nHeight > 1050000 && nHeight <= 1100000) {
-        ret = blockValue * 0.71;
-    } else if (nHeight > 1100000 && nHeight <= 1150000) {
-        ret = blockValue * 0.72;
-    } else if (nHeight > 1150000 && nHeight <= 1200000) {
-        ret = blockValue * 0.73;
-    } else if (nHeight > 1200000 && nHeight <= 1250000) {
-        ret = blockValue * 0.74;
-    } else if (nHeight > 1250000 && nHeight <= 1300000) {
-        ret = blockValue * 0.75;
-    } else if (nHeight > 1300000 && nHeight <= 1350000) {
-        ret = blockValue * 0.76;
-    } else if (nHeight > 1350000 && nHeight <= 1400000) {
-        ret = blockValue * 0.77;
-    } else if (nHeight > 1400000 && nHeight <= 1434250) {
-        ret = blockValue * 0.78;
-    } else if (nHeight > 1434250) {
-        ret = blockValue * 0.40; }
-
-    return ret;
+    return 3 * COIN;
 }
 
 // ppcoin: find last block index up to pindex 
