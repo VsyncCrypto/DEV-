@@ -16,6 +16,7 @@
 uint256 CBlockHeader::GetHash() const
 {
     if (nVersion < 4)  {
+        return XEVAN(BEGIN(nVersion), END(nNonce));
 #if defined(WORDS_BIGENDIAN)
         uint8_t data[80];
         WriteLE32(&data[0], nVersion);
