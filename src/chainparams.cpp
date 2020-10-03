@@ -166,16 +166,16 @@ public:
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
         // height-based activations
-        consensus.height_last_ZC_AccumCheckpoint = 999999999;
-        consensus.height_last_ZC_WrappedSerials = -1;
-        consensus.height_start_InvalidUTXOsCheck = 999999999;
-        consensus.height_start_ZC_InvalidSerials = 999999999;
-        consensus.height_start_ZC_SerialRangeCheck = 1;
-        consensus.height_ZC_RecalcAccumulators = 999999999;
+        consensus.height_last_ZC_AccumCheckpoint = INT_MAX;
+        consensus.height_last_ZC_WrappedSerials = INT_MAX;
+        consensus.height_start_InvalidUTXOsCheck = INT_MAX;
+        consensus.height_start_ZC_InvalidSerials = INT_MAX;
+        consensus.height_start_ZC_SerialRangeCheck = INT_MAX;
+        consensus.height_ZC_RecalcAccumulators = INT_MAX;
 
         // validation by-pass
-        consensus.nVsyncBadBlockTime = 1471401614;    // Skip nBit validation of Block 259201 per PR #915
-        consensus.nVsyncBadBlockBits = 0x1c056dac;    // Skip nBit validation of Block 259201 per PR #915
+        consensus.nVsyncBadBlockTime = 1520433443;    // Skip nBit validation of Block 259201 per PR #915
+        consensus.nVsyncBadBlockBits = 0x1c083484;    // Skip nBit validation of Block 259201 per PR #915
 
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -189,7 +189,7 @@ public:
         consensus.ZC_MinMintConfirmations = 20;
         consensus.ZC_MinMintFee = 1 * CENT;
         consensus.ZC_MinStakeDepth = 200;
-        consensus.ZC_TimeStart = 1524672000;        // October 17, 2017 4:30:00 AM
+        consensus.ZC_TimeStart = INT_MAX;        // October 17, 2017 4:30:00 AM
         consensus.ZC_WrappedSerialsSupply = 0 * COIN;   // zerocoin supply at height_last_ZC_WrappedSerials
 
         // Network upgrades
@@ -199,27 +199,27 @@ public:
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
         consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 259201;
         consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 1;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = 1490531;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = 1490731;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = INT_MAX;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = INT_MAX;
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 1490931;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = 1491231;
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 1491431;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 1491531;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = INT_MAX;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 1490631;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 1490700;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =
-                uint256S("0x");
+                uint256S("0x0");
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].hashActivationBlock =
-                uint256S("0x");
+                uint256S("0x0");
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].hashActivationBlock =
-                uint256S("0x");
+                uint256S("0x0");
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].hashActivationBlock =
-                uint256S("0x");
+                uint256S("0x0");
         consensus.vUpgrades[Consensus::UPGRADE_V3_4].hashActivationBlock =
-                uint256S("0x");
+                uint256S("0x0");
         consensus.vUpgrades[Consensus::UPGRADE_V4_0].hashActivationBlock =
-                uint256S("0x");
+                uint256S("0x0");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.

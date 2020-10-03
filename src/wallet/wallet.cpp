@@ -1367,7 +1367,7 @@ CAmount CWalletTx::GetLockedCredit() const
         }
 
         // Add masternode collaterals which are handled like locked coins
-        else if (fMasterNode && vout[i].nValue == 10000 * COIN) {
+        else if (fMasterNode && vout[i].nValue == 100000 * COIN) {
             nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
         }
 
@@ -1971,8 +1971,8 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
     CTxOut txOut = wtx.vout[nOutputIndex];
 
     // Masternode collateral value
-    if (txOut.nValue != 10000 * COIN) {
-        strError = "Invalid collateral tx value, must be 10,000 VSX";
+    if (txOut.nValue != 100000 * COIN) {
+        strError = "Invalid collateral tx value, must be 100,000 VSX";
         return error("%s: tx %s, index %d not a masternode collateral", __func__, strTxHash, nOutputIndex);
     }
 
@@ -2043,7 +2043,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
 
                 // Check for only 10k utxo
-                if (nCoinType == ONLY_10000 && pcoin->vout[i].nValue != 10000 * COIN) continue;
+                if (nCoinType == ONLY_100000 && pcoin->vout[i].nValue != 100000 * COIN) continue;
 
                 // Check for stakeable utxo
                 if (nCoinType == STAKEABLE_COINS && pcoin->vout[i].IsZerocoinMint()) continue;
@@ -2060,7 +2060,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                 if (mine == ISMINE_WATCH_ONLY && coinControl && !coinControl->fAllowWatchOnly) continue;
 
                 // Skip locked utxo
-                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) continue;
+                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_100000) continue;
 
                 // Check if we should include zero value utxo
                 if (pcoin->vout[i].nValue <= 0) continue;
