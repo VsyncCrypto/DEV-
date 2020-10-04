@@ -64,13 +64,13 @@ struct CBlockTemplate;
 struct CNodeStateStats;
 
 /** Default for -limitancestorcount, max number of in-mempool ancestors */
-static const unsigned int DEFAULT_ANCESTOR_LIMIT = 25;
+static const unsigned int DEFAULT_ANCESTOR_LIMIT = 50;
 /** Default for -limitancestorsize, maximum kilobytes of tx + all in-mempool ancestors */
 static const unsigned int DEFAULT_ANCESTOR_SIZE_LIMIT = 101;
 /** Default for -banscore */
 static const int DEFAULT_BANSCORE_THRESHOLD = 100;
 /** Default for -limitdescendantcount, max number of in-mempool descendants */
-static const unsigned int DEFAULT_DESCENDANT_LIMIT = 25;
+static const unsigned int DEFAULT_DESCENDANT_LIMIT = 100;
 /** Default for -limitdescendantsize, maximum kilobytes of in-mempool descendants */
 static const unsigned int DEFAULT_DESCENDANT_SIZE_LIMIT = 101;
 /** Default for -mempoolexpiry, expiration time for mempool transactions in hours */
@@ -85,7 +85,7 @@ static const bool DEFAULT_RELAYPRIORITY = true;
 /** Default for -limitfeerelay */
 static const unsigned int DEFAULT_LIMITFREERELAY = 30;
 /** The maximum size for transactions we're willing to relay/mine */
-static const unsigned int MAX_STANDARD_TX_SIZE = 100000;
+static const unsigned int MAX_STANDARD_TX_SIZE = 400000;
 static const unsigned int MAX_ZEROCOIN_TX_SIZE = 150000;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
@@ -102,9 +102,9 @@ static const int MAX_SCRIPTCHECK_THREADS = 16;
 /** -par default (number of script-checking threads, 0 = auto) */
 static const int DEFAULT_SCRIPTCHECK_THREADS = 0;
 /** Number of blocks that can be requested at any given time from a single peer. */
-static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 16;
+static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 512;
 /** Timeout in seconds during which a peer must stall block download progress before being disconnected. */
-static const unsigned int BLOCK_STALLING_TIMEOUT = 2;
+static const unsigned int BLOCK_STALLING_TIMEOUT = 3;
 /** Number of headers sent in one getheaders result. We rely on the assumption that if a peer sends
  *  less than this number, we reached their tip. Changing this value is a protocol upgrade. */
 static const unsigned int MAX_HEADERS_RESULTS = 2000;
@@ -122,10 +122,10 @@ static const unsigned int MAX_REJECT_MESSAGE_LENGTH = 111;
 /** Average delay between local address broadcasts in seconds. */
 static const unsigned int AVG_LOCAL_ADDRESS_BROADCAST_INTERVAL = 24 * 24 * 60;
 /** Average delay between peer address broadcasts in seconds. */
-static const unsigned int AVG_ADDRESS_BROADCAST_INTERVAL = 30;
+static const unsigned int AVG_ADDRESS_BROADCAST_INTERVAL = 200;
 /** Average delay between trickled inventory broadcasts in seconds.
  *  Blocks, whitelisted receivers, and a random 25% of transactions bypass this. */
-static const unsigned int AVG_INVENTORY_BROADCAST_INTERVAL = 5;
+static const unsigned int AVG_INVENTORY_BROADCAST_INTERVAL = 20;
 
 /** Enable bloom filter */
  static const bool DEFAULT_PEERBLOOMFILTERS = true;

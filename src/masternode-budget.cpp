@@ -799,7 +799,7 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
     CAmount nSubsidy = 0;
     const Consensus::Params& consensus = Params().GetConsensus();
     const bool isPoSActive = consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_POS);
-    if (isPoSActive && nHeight >= 151200) {
+    if (!isPoSActive && nHeight >= 151200) {
         nSubsidy = 80 * COIN;
     } else if (nHeight <= 302399 && isPoSActive) {
         nSubsidy = 75 * COIN;
