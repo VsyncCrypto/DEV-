@@ -336,7 +336,7 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, const CBloc
     }
 
     if (hasPayment) {
-        CAmount masternodePayment = GetMasternodePayment();
+        CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight + 1);
         if (fProofOfStake) {
             /**For Proof Of Stake vout[0] must be null
              * Stake reward can be split into many different outputs, so we must
@@ -551,7 +551,8 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED) return true;
 
     std::string strPayeesPossible = "";
-    CAmount requiredMasternodePayment = GetMasternodePayment();
+    int nHeight = chainActive.Tip()->nHeight;
+    CAmount requiredMasternodePayment = GetMasternodePayment(nHeight + 1);
 
     for (CMasternodePayee& payee : vecPayments) {
         bool found = false;

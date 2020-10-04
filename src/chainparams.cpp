@@ -189,7 +189,7 @@ public:
         consensus.ZC_MinMintConfirmations = 20;
         consensus.ZC_MinMintFee = 1 * CENT;
         consensus.ZC_MinStakeDepth = 200;
-        consensus.ZC_TimeStart = INT_MAX;        // October 17, 2017 4:30:00 AM
+        consensus.ZC_TimeStart = 1524672000;
         consensus.ZC_WrappedSerialsSupply = 0 * COIN;   // zerocoin supply at height_last_ZC_WrappedSerials
 
         // Network upgrades
@@ -199,17 +199,17 @@ public:
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
         consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 259201;
         consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 1;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = INT_MAX;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = 299282;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = INT_MAX;
-        consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 1490931;
+        consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 1490600;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = INT_MAX;
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 1490631;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 1490700;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 1490700;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 1490800;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =
-                uint256S("0x0");
+                uint256S("0x2074e5ad8fb7391d074476a58eeb5d1612e218958175249cee5673810a3165d4");
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].hashActivationBlock =
                 uint256S("0x0");
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].hashActivationBlock =

@@ -1520,9 +1520,9 @@ int64_t GetBlockValue(int nHeight)
         nSubsidy = 225 * COIN;
     } else if (nHeight < 151200 && nHeight >= 86400) {
         nSubsidy = 225 * COIN;
-    } else if (nHeight <= 259200 && nHeight >= 151200) {
+    } else if (!isPoSActive && nHeight >= 151200) {
         nSubsidy = 80 * COIN;
-    } else if (nHeight <= 302399 && nHeight > 259200) {
+    } else if (nHeight <= 302399 && isPoSActive) {
         nSubsidy = 75 * COIN;
     } else if (nHeight <= 345599 && nHeight >= 302400) {
         nSubsidy = 67 * COIN;
@@ -1546,23 +1546,43 @@ int64_t GetBlockValue(int nHeight)
         nSubsidy = 5 * COIN;
     } else if (nHeight >= 1434250) {
         nSubsidy = 10 * COIN;
-    } else {
-        nSubsidy = 0 * COIN;
     }
+
     return nSubsidy;
 }
 
-int64_t GetMasternodePayment()
+int64_t GetMasternodePayment(int nHeight)
 {
-    return 3 * COIN;
-}
+    const Consensus::Params& consensus = Params().GetConsensus();
+    const bool isPoSActive = consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_POS);
+    int64_t blockValue = GetBlockValue(nHeight);
+    int64_t ret = 0;
 
-// ppcoin: find last block index up to pindex 
-const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake) { 
-    while (pindex && pindex->pprev && (pindex->IsProofOfStake() != fProofOfStake)){ 
-        pindex = pindex->pprev; 
-    } 
-    return pindex; 
+    if (!isPoSActive) {
+        ret = blockValue * 0;
+    } else if (isPoSActive && nHeight <= 1050000) {
+        ret = blockValue * 0.70;
+    } else if (nHeight > 1050000 && nHeight <= 1100000) {
+        ret = blockValue * 0.71;
+    } else if (nHeight > 1100000 && nHeight <= 1150000) {
+        ret = blockValue * 0.72;
+    } else if (nHeight > 1150000 && nHeight <= 1200000) {
+        ret = blockValue * 0.73;
+    } else if (nHeight > 1200000 && nHeight <= 1250000) {
+        ret = blockValue * 0.74;
+    } else if (nHeight > 1250000 && nHeight <= 1300000) {
+        ret = blockValue * 0.75;
+    } else if (nHeight > 1300000 && nHeight <= 1350000) {
+        ret = blockValue * 0.76;
+    } else if (nHeight > 1350000 && nHeight <= 1400000) {
+        ret = blockValue * 0.77;
+    } else if (nHeight > 1400000 && nHeight <= 1434250) {
+        ret = blockValue * 0.78;
+    } else if (nHeight > 1434250) {
+        ret = blockValue * 0.40; 
+    }
+
+    return ret;
 } 
 
 bool IsInitialBlockDownload()
@@ -2241,7 +2261,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         return state.DoS(100, error("ConnectBlock() : PoS period not active"),
             REJECT_INVALID, "PoS-early");
 
-    if (pindex->nHeight > 1434251 && block.IsProofOfWork())
+    if (isPoSActive && block.IsProofOfWork())
         return state.DoS(100, error("ConnectBlock() : PoW period ended"),
             REJECT_INVALID, "PoW-ended");
 
@@ -3380,8 +3400,8 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
 
     // Version 4 header must be used after consensus.ZC_TimeStart. And never before.
     if (block.GetBlockTime() > Params().GetConsensus().ZC_TimeStart) {
-        // if(block.nVersion < 4)
-           // return state.DoS(50,false, REJECT_INVALID, "block-version", "must be above 4 after ZC_TimeStart");
+        if(block.nVersion < 4)
+            return state.DoS(50,false, REJECT_INVALID, "block-version", "must be above 4 after ZC_TimeStart");
     } else {
         if (block.nVersion >= 4)
             return state.DoS(50,false, REJECT_INVALID, "block-version", "must be below 4 before ZC_TimeStart");
@@ -3621,7 +3641,7 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
     if (pindexPrev == NULL)
         return error("%s : null pindexPrev for block %s", __func__, block.GetHash().GetHex());
 
-    unsigned int nBitsRequired = GetNextWorkRequired(pindexPrev, &block, block.IsProofOfStake());
+    unsigned int nBitsRequired = GetNextWorkRequired(pindexPrev, &block);
 
     if (!Params().IsRegTestNet() && block.IsProofOfWork() && (pindexPrev->nHeight + 1 <= 68589)) {
         double n1 = ConvertBitsToDouble(block.nBits);
@@ -3706,10 +3726,10 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         return state.DoS(0, error("%s : forked chain older than last checkpoint (height %d)", __func__, nHeight));
 
     // Reject outdated version blocks
-    if(//(block.nVersion < 3 && nHeight >= 1) ||
-        //(block.nVersion < 4 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC)) ||
-        //(block.nVersion < 5 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_BIP65)) ||
-        //(block.nVersion < 6 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4)) ||
+    if((block.nVersion < 3 && nHeight >= 1) ||
+        (block.nVersion < 4 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC)) ||
+        (block.nVersion < 5 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_BIP65)) ||
+        (block.nVersion < 6 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4)) ||
         (block.nVersion < 7 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V4_0)))
     {
         std::string stringErr = strprintf("rejected block version %d at height %d", block.nVersion, nHeight);
@@ -3756,13 +3776,13 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
         }
 
     // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
-    if (pindexPrev && block.IsProofOfWork()) { // pindexPrev is only null on the first block which is a version 1 block.
+    /*if (pindexPrev) { // pindexPrev is only null on the first block which is a version 1 block.
         CScript expect = CScript() << nHeight;
         if (block.vtx[0].vin[0].scriptSig.size() < expect.size() ||
             !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) {
             return state.DoS(100, false, REJECT_INVALID, "bad-cb-height", false, "block height mismatch in coinbase");
         }
-    }
+    }*/
 
     return true;
 }
@@ -5602,11 +5622,6 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         std::vector<uint256> vEraseQueue;
         CTransaction tx;
 
-        //masternode signed transaction
-        bool ignoreFees = false;
-        CTxIn vin;
-        std::vector<unsigned char> vchSig;
-
         vRecv >> tx;
 
         CInv inv(MSG_TX, tx.GetHash());
@@ -5674,7 +5689,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 }
             }
 
-            for (uint256 hash : vEraseQueue) EraseOrphanTx(hash);
+            for (uint256& hash : vEraseQueue) EraseOrphanTx(hash);
 
         } else if (tx.HasZerocoinSpendInputs() && AcceptToMemoryPool(mempool, state, tx, true, &fMissingZerocoinInputs, false, false, ignoreFees)) {
             //Presstab: ZCoin has a bunch of code commented out here. Is this something that should have more going on?
