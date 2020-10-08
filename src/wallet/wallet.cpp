@@ -2042,7 +2042,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
 
-                // Check for only 10k utxo
+                // Check for only 100k utxo
                 if (nCoinType == ONLY_100000 && pcoin->vout[i].nValue != 100000 * COIN) continue;
 
                 // Check for stakeable utxo
