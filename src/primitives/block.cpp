@@ -23,7 +23,7 @@ uint256 CBlockHeader::GetHash() const
         return XEVAN(BEGIN(nVersion), END(nAccumulatorCheckpoint));
     }
     // version >= 4
-    return SerializeHash(*this);
+    return XEVAN(BEGIN(nVersion), END(nNonce));
 }
 
 std::string CBlock::ToString() const
